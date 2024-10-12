@@ -24,7 +24,7 @@ async function fetchNewsForAllTopics() {
   let allArticles = [];
 
   for (let topic of diversityTopics) {
-     const url "https://newsapi.org/v2/everything?q=diversity&apiKey=4363cf2695484cac8c6429f14f663394"
+     const url "https://newsapi.org/v2/everything?q=diversity&apiKey=4363cf2695484cac8c6429f14f663394";
 
     try {
       const response = await fetch(url);
