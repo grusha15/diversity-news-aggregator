@@ -1,0 +1,41 @@
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+}
+
+.article {
+    background: #fff;
+    padding: 15px;
+    margin: 15px auto;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 80%;
+    max-width: 600px;
+}
+
+.article img {
+    max-width: 100%;
+    border-radius: 5px;
+}
+
+.article a {
+    font-size: 1.2em;
+    text-decoration: none;
+    color: #007acc;
+}
+
+.article a:hover {
+    text-decoration: underline;
+}
+
+.article-date {
+    color: #777;
+    font-size: 0.9em;
+}

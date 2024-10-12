@@ -1,0 +1,16 @@
+
+
+# Ignore package lock file (optional)
+#package-lock.json
+
+# Ignore environment files (if any)
+.env
+
+# Ignore build directories (if any)
+dist/
+.cache/
+
+# Ignore IDE/project settings
+.vscode/
+*.log
+
