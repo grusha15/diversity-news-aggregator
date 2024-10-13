@@ -1,3 +1,4 @@
+const API_KEY = "e9c4146a69d0414d9677a6703134a2c1";
 const diversityTopics = [
   'diversity and inclusion initiatives',
   'workplace diversity policies',
@@ -11,7 +12,7 @@ const diversityTopics = [
   'global diversity and inclusion trends'
 ];
 
-// Updated Function to Use Axios
+// Axios is now being used for fetching data
 async function fetchNewsForAllTopics() {
   const newsContainer = document.getElementById('news-container');
   newsContainer.innerHTML = ''; // Clear container before fetching new data
@@ -25,19 +26,23 @@ async function fetchNewsForAllTopics() {
   let allArticles = [];
 
   for (let topic of diversityTopics) {
-    const url = `https://newsapi.org/v2/everything?q=${encodeURIComponent(topic)}&apiKey=e9c4146a69d0414d9677a6703134a2c1`;
+    const url = `https://newsapi.org/v2/everything?q=${encodeURIComponent(topic)}&apiKey=${API_KEY}`;
 
     try {
-      const response = await axios.get(url);
+      const response = await axios.get(url, {
+        headers: {
+          'Accept': 'application/json',
+          'Upgrade-Insecure-Requests': '1'
+        }
+      });
 
-      // Ensure response data is in expected format
-      if (response.data && response.data.articles && response.data.articles.length > 0) {
+      if (response.data.articles && response.data.articles.length > 0) {
         allArticles = allArticles.concat(response.data.articles);
       } else {
         console.warn(`No articles found for topic: ${topic}`);
       }
     } catch (error) {
-      console.error(`Error fetching news for topic '${topic}':`, error);
+      console.error(`Error fetching news for topic '${topic}':`, error.message);
     }
   }
 
@@ -51,7 +56,7 @@ async function fetchNewsForAllTopics() {
   }
 }
 
-// Function to Display Articles in the Container
+// Function to display articles in the news container
 function displayArticles(articles) {
   const newsContainer = document.getElementById('news-container');
   newsContainer.innerHTML = ''; // Clear the container before displaying articles
