@@ -11,12 +11,11 @@ const diversityTopics = [
   'global diversity and inclusion trends'
 ];
 
-// Fetch News for all Topics
 async function fetchNewsForAllTopics() {
   const newsContainer = document.getElementById('news-container');
-  newsContainer.innerHTML = ''; // Clear previous data
+  newsContainer.innerHTML = ''; // Clear container before fetching new data
 
-  // Show loading spinner while fetching
+  // Show loading spinner while fetching data
   const loadingSpinner = document.createElement('div');
   loadingSpinner.classList.add('loading-spinner');
   loadingSpinner.textContent = 'Loading news...';
@@ -29,13 +28,20 @@ async function fetchNewsForAllTopics() {
 
     try {
       const response = await axios.get(url);
-      allArticles = allArticles.concat(response.data);
+      const data = response.data;
+
+      // Check if articles exist in the response
+      if (data.articles && data.articles.length > 0) {
+        allArticles = allArticles.concat(data.articles);
+      } else {
+        console.warn(`No articles found for topic: ${topic}`);
+      }
     } catch (error) {
       console.error(`Error fetching news for topic '${topic}':`, error);
     }
   }
 
-  // Remove loading spinner
+  // Remove loading spinner after fetching all articles
   loadingSpinner.remove();
 
   if (allArticles.length > 0) {
@@ -43,44 +49,6 @@ async function fetchNewsForAllTopics() {
   } else {
     newsContainer.innerHTML = '<p>No relevant articles found at the moment. Please check back later.</p>';
   }
-}
-
-// Function to display articles in the news container
-function displayArticles(articles) {
-  const newsContainer = document.getElementById('news-container');
-  newsContainer.innerHTML = ''; // Clear the container before displaying articles
-
-  articles.forEach((article) => {
-    const articleElement = document.createElement('div');
-    articleElement.classList.add('article');
-
-    const articleImage = document.createElement('img');
-    articleImage.src = article.urlToImage || 'https://via.placeholder.com/600x400?text=Image+Not+Available';
-    articleImage.alt = article.title;
-    articleImage.style.width = "100%";
-    articleImage.style.height = "200px";
-    articleImage.style.objectFit = "cover";
-
-    // Placeholder if image fails
-    articleImage.onerror = function () {
-      articleImage.src = 'https://via.placeholder.com/600x400?text=Image+Not+Available';
-    };
-
-    const articleLink = document.createElement('a');
-    articleLink.href = article.url;
-    articleLink.target = '_blank';
-    articleLink.textContent = article.title;
-
-    const articleDate = document.createElement('p');
-    articleDate.classList.add('article-date');
-    articleDate.textContent = new Date(article.publishedAt).toLocaleDateString() || "Date not available";
-
-    articleElement.appendChild(articleImage);
-    articleElement.appendChild(articleLink);
-    articleElement.appendChild(articleDate);
-
-    newsContainer.appendChild(articleElement);
-  });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
