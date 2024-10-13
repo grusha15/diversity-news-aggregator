@@ -26,7 +26,8 @@ async function fetchNewsForAllTopics() {
   let allArticles = [];
 
   for (let topic of diversityTopics) {
-    const url = `/api/newsProxy?query=${encodeURIComponent(topic)}`;
+    const url = `https://newsapi.org/v2/everything?q=${encodeURIComponent(topic)}&apiKey=e9c4146a69d0414d9677a6703134a2c1`;
+
 
 
 
