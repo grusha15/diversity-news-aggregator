@@ -1,4 +1,3 @@
-const API_KEY = "e9c4146a69d0414d9677a6703134a2c1";
 const diversityTopics = [
   'diversity and inclusion initiatives',
   'workplace diversity policies',
@@ -12,12 +11,12 @@ const diversityTopics = [
   'global diversity and inclusion trends'
 ];
 
-// Axios is now being used for fetching data
+// Fetch News for all Topics
 async function fetchNewsForAllTopics() {
   const newsContainer = document.getElementById('news-container');
-  newsContainer.innerHTML = ''; // Clear container before fetching new data
+  newsContainer.innerHTML = ''; // Clear previous data
 
-  // Show loading spinner while fetching data
+  // Show loading spinner while fetching
   const loadingSpinner = document.createElement('div');
   loadingSpinner.classList.add('loading-spinner');
   loadingSpinner.textContent = 'Loading news...';
@@ -26,30 +25,17 @@ async function fetchNewsForAllTopics() {
   let allArticles = [];
 
   for (let topic of diversityTopics) {
-    const url = `https://newsapi.org/v2/everything?q=${encodeURIComponent(topic)}&apiKey=e9c4146a69d0414d9677a6703134a2c1`;
-
-
-
+    const url = `/api/newsProxy?query=${encodeURIComponent(topic)}`;
 
     try {
-      const response = await axios.get(url, {
-        headers: {
-          'Accept': 'application/json',
-          'Upgrade-Insecure-Requests': '1'
-        }
-      });
-
-      if (response.data.articles && response.data.articles.length > 0) {
-        allArticles = allArticles.concat(response.data.articles);
-      } else {
-        console.warn(`No articles found for topic: ${topic}`);
-      }
+      const response = await axios.get(url);
+      allArticles = allArticles.concat(response.data);
     } catch (error) {
-      console.error(`Error fetching news for topic '${topic}':`, error.message);
+      console.error(`Error fetching news for topic '${topic}':`, error);
     }
   }
 
-  // Remove loading spinner after fetching all articles
+  // Remove loading spinner
   loadingSpinner.remove();
 
   if (allArticles.length > 0) {
@@ -64,11 +50,6 @@ function displayArticles(articles) {
   const newsContainer = document.getElementById('news-container');
   newsContainer.innerHTML = ''; // Clear the container before displaying articles
 
-  if (!articles || articles.length === 0) {
-    newsContainer.innerHTML = '<p>No relevant articles available at the moment. Please check back later.</p>';
-    return;
-  }
-
   articles.forEach((article) => {
     const articleElement = document.createElement('div');
     articleElement.classList.add('article');
@@ -77,11 +58,11 @@ function displayArticles(articles) {
     articleImage.src = article.urlToImage || 'https://via.placeholder.com/600x400?text=Image+Not+Available';
     articleImage.alt = article.title;
     articleImage.style.width = "100%";
-    articleImage.style.height = "200px"; // Fixed height to prevent shifting
+    articleImage.style.height = "200px";
     articleImage.style.objectFit = "cover";
 
-    // Check if image is available, if not use a placeholder image
-    articleImage.onerror = function() {
+    // Placeholder if image fails
+    articleImage.onerror = function () {
       articleImage.src = 'https://via.placeholder.com/600x400?text=Image+Not+Available';
     };
 
@@ -102,7 +83,6 @@ function displayArticles(articles) {
   });
 }
 
-// Start fetching news when the page loads
 document.addEventListener('DOMContentLoaded', () => {
   fetchNewsForAllTopics();
 });
