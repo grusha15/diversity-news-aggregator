@@ -11,6 +11,7 @@ const diversityTopics = [
   'global diversity and inclusion trends'
 ];
 
+// Updated Function to Use Axios
 async function fetchNewsForAllTopics() {
   const newsContainer = document.getElementById('news-container');
   newsContainer.innerHTML = ''; // Clear container before fetching new data
@@ -24,21 +25,14 @@ async function fetchNewsForAllTopics() {
   let allArticles = [];
 
   for (let topic of diversityTopics) {
-  const url = "https://newsapi.org/v2/everything?q=diversity&apiKey=4363cf2695484cac8c6429f14f663394";
-
+    const url = `https://newsapi.org/v2/everything?q=${encodeURIComponent(topic)}&apiKey=e9c4146a69d0414d9677a6703134a2c1`;
 
     try {
-      const response = await fetch(url);
-      const contentType = response.headers.get('content-type');
-      if (!contentType || !contentType.includes('application/json')) {
-        throw new Error(`Expected JSON, got ${contentType}`);
-      }
+      const response = await axios.get(url);
 
-      const data = await response.json();
-
-      // Check if articles exist in the response
-      if (data.articles && data.articles.length > 0) {
-        allArticles = allArticles.concat(data.articles);
+      // Ensure response data is in expected format
+      if (response.data && response.data.articles && response.data.articles.length > 0) {
+        allArticles = allArticles.concat(response.data.articles);
       } else {
         console.warn(`No articles found for topic: ${topic}`);
       }
@@ -57,7 +51,7 @@ async function fetchNewsForAllTopics() {
   }
 }
 
-
+// Function to Display Articles in the Container
 function displayArticles(articles) {
   const newsContainer = document.getElementById('news-container');
   newsContainer.innerHTML = ''; // Clear the container before displaying articles
